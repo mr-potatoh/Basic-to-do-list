@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>to-do</title>
+
+    <style>
+        
+        body {
+            padding: 8%;
+            background-color: #75a99c;
+            color: #115845;
+            font-family: Arial;
+        }
+        .todo{
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+            flex-wrap: nowrap;
+            height: 100%;
+            place-items: center;
+        }
+        .content{
+            background-color: #97cabd;
+            padding: 25px;
+            border-radius: 15px;
+            width: 30%;
+            margin: 2px;
+            box-shadow: 0px 0px 20px 6px rgba(0,0,0,0.1);
+            
+        }
+
+        ul{
+            list-style: none;
+            width: 70%;
+            
+        }  
+
+        ul li {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+
+        input[type="checkbox" i], span{
+            cursor: pointer;
+        }
+
+        span{
+            float: right;
+            font-size: 20px;
+            border-radius: 100%;
+            padding-left: 5px;
+            padding-right: 5px;
+
+        }
+
+        span:hover{
+            background-color: #75a99c62;
+           
+        }
+
+        input[type="checkbox"]:checked +ul li label{
+                text-decoration: line-through;
+        }
+        
+
+
+    </style>
+
+
+</head>
+<body>
+    <div class="todo">
+    <div class="content">
+        <h1 style="font-size: 26px;">🗒️To-Dos</h1>
+    <input type="text" placeholder="Add a task" id="taskInput" style="background-color: #c4e9df; border: 0px; border-radius: 5px;height:20px; padding: 5px; width: 85%;">
+    <input type="button" value="+" id="addBtn" onclick="add()" style="background-color: #307663; border: 0px; border-radius: 5px; height:30px; width: 30px ;padding: 5px; color: #c4e9df;">
+    <ul id="taskList">
+        <!--taskList-->
+    </ul>
+
+    </div>
+
+    <script>
+
+    document.addEventListener("DOMContentLoaded", loadTask,);
+
+        
+        
+        function add() {
+
+            let taskInput= document.getElementById("taskInput");
+            let taskName= taskInput.value.trim();
+            
+            
+            
+            if (taskName !== "") {
+                
+                let list = document.createElement("li");
+                    
+
+                var checkbox = document.createElement("input");
+                checkbox.type="checkbox";
+
+                let delBtn = document.createElement("span");
+                delBtn.innerText='×';
+
+                let div= document.createElement("div");
+
+                
+
+                let name = document.createElement("label");
+                name.innerText=taskName.substring(0,35);
+
+
+                list.appendChild(div);
+                div.appendChild(checkbox);
+                div.appendChild(name);
+                document.getElementById("taskList").appendChild(list);	
+                list.appendChild(delBtn);
+               
+                delBtn.onclick=function() {
+                    del(list);
+                }
+                
+                function del(element) {
+                    element.remove();
+                    saveTask();
+                }
+
+                saveTask();
+                                
+                taskInput.value= '';
+
+                }
+            }
+
+
+            function saveTask(){
+                var taskList = document.getElementById("taskList")
+                var task = []
+
+                taskList.childNodes.forEach(function(taskItem) {
+                    task.push(taskItem);
+            })
+        
+            localStorage.setItem("task", JSON.stringify(task));
+        }
+
+        function loadTask(){
+            var taskList = document.getElementById("taskList")
+            var savedTask = localStorage.getItem("task")
+
+            if (savedTask){
+                var tasks = JSON.parse(savedTask);
+
+                tasks.forEach(function(list) {
+                    var list= document.createElement("li")
+                    list.textContent = list
+                    taskList.appendChild(list);
+            })
+        }
+    }
+
+
+    </script>
+    
+</body>
+</html>
